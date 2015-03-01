@@ -6,7 +6,6 @@ SRPM building tools for iniparser-3.1 for runing Samba 4 on RHEL 6.
 These are built from Fedora rawhide releases, and need to be built and
 installed in the following order.
 
-	krb5-1.10.3-srpm
 	iniparser-3.1-srpm
 
 	libtalloc-2.0.8-srpm
