@@ -1,6 +1,7 @@
 Name:		iniparser
 Version:	3.1
-Release:	1%{?dist}
+#Release:	1%{?dist}
+Release:	0.1%{?dist}
 Summary:	C library for parsing "INI-style" files
 
 Group:		System Environment/Libraries
@@ -53,6 +54,9 @@ ln -s libiniparser.so.0 %{buildroot}%{_libdir}/libiniparser.so
 %{_includedir}/*.h
 
 %changelog
+* Sun Mar  1 2016 Nico Kadel-Garcia <nkadel@gmail.com> - 3.1-0.1
+- Roll back minor revision to avoid conflct with RHEL or EPEL publication
+
 * Fri Aug 10 2012 Jaromir Capik <jcapik@redhat.com> - 3.1-1
 - Update to 3.1
 - Minor spec file changes according to the latest guidelines
