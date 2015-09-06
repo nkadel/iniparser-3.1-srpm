@@ -9,13 +9,11 @@ LANG=C
 #MOCKS+=epel-7-x86_64
 MOCKS+=epel-6-x86_64
 
-#MOCKS+=epel-7-i386
 #MOCKS+=epel-6-i386
 
 REPOBASEDIR=/var/www/linux/samba4repo
 
-SPEC := `ls *.spec | head -1`
-PKGNAME := "`ls *.spec | head -1 | sed 's/.spec$$//g'`"
+SPEC := `ls *.spec`
 
 all:: verifyspec $(MOCKS)
 
