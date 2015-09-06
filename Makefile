@@ -28,13 +28,14 @@ verifyspec:: FORCE
 
 srpm:: verifyspec FORCE
 	@echo "Building SRPM with $(SPEC)"
-	rm -f $(PKGNAME)*.src.rpm
-	rpmbuild --define '_sourcedir $(PWD)' \
-		--define '_srcrpmdir $(PWD)' \
+	rm -rf rpmbuild
+	rpmbuild --define '_topdir $(PWD)/rpmbuild' \
+		--define '_sourcedir $(PWD)' \
 		-bs $(SPEC) --nodeps
 
 build:: srpm FORCE
-	rpmbuild --rebuild `ls *.src.rpm | grep -v ^epel-`
+	rpmbuild --define '_topdir $(PWD)/rpmbuild' \
+		--rebuild rpmbuild/SRPMS/*.src.rpm
 
 $(MOCKS):: verifyspec FORCE
 	@if [ -e $@ -a -n "`find $@ -name \*.rpm`" ]; then \
@@ -75,6 +76,7 @@ install:: $(MOCKS)
 
 clean::
 	rm -rf $(MOCKS)
+	rm -rf rpmbuild
 
 realclean distclean:: clean
 	rm -f *.src.rpm

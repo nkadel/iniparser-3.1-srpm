@@ -1,13 +1,17 @@
+# Set --with test to run the Samba torture testsuite.
+%bcond_with testsuite
+
 Name:		iniparser
 Version:	3.1
-#Release:	1%{?dist}
-Release:	0.1%{?dist}
+#Release:	5%{?dist}
+Release:	0.5%{?dist}
 Summary:	C library for parsing "INI-style" files
 
 Group:		System Environment/Libraries
 License:	MIT
 URL:		http://ndevilla.free.fr/%{name}/
 Source0:	http://ndevilla.free.fr/%{name}/%{name}-%{version}.tar.gz
+Patch0:		iniparser-3.1-Fix-crash-with-crafted-ini-files.patch
 
 %description
 iniParser is an ANSI C library to parse "INI-style" files, often used to
@@ -25,6 +29,7 @@ you will need to install %{name}-devel.
 
 %prep
 %setup -q -n %{name}
+%patch0 -p1 -b .iniparser-3.1-Fix-crash-with-crafted-ini-files.patch
 
 %build
 # remove library rpath from Makefile
@@ -41,6 +46,14 @@ install -m 644 -t %{buildroot}%{_includedir}/ src/dictionary.h src/iniparser.h
 install -m 755 -t %{buildroot}%{_libdir}/ libiniparser.so.0
 ln -s libiniparser.so.0 %{buildroot}%{_libdir}/libiniparser.so
 
+%if %{with testsuite}
+%check
+make
+make check
+./test/iniexample
+./test/parse test/twisted.ini
+%endif
+
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
@@ -54,8 +67,20 @@ ln -s libiniparser.so.0 %{buildroot}%{_libdir}/libiniparser.so
 %{_includedir}/*.h
 
 %changelog
-* Sun Mar  1 2016 Nico Kadel-Garcia <nkadel@gmail.com> - 3.1-0.1
+* Sun Mar 22 2015 Nico Kadel-Garcia <nkadel@gmail.com> - 3.1-0.1
 - Roll back minor revision to avoid conflct with RHEL or EPEL publication
+
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 3.1-5
+- Mass rebuild 2014-01-24
+
+* Fri Jan 10 2014 - Andreas Schneider <asn@redhat.com> - 3.1-4
+- resolves: #1031119 - Fix possible crash with crafted ini files.
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 3.1-3
+- Mass rebuild 2013-12-27
+
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
 * Fri Aug 10 2012 Jaromir Capik <jcapik@redhat.com> - 3.1-1
 - Update to 3.1
